@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\User\source\repos\kayanut26\mp2-lab2-sparse-matrix\build\CMakeFiles\89eb102a9de96fb3852ed87805d82c40\RUN_TESTS_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{A872D275-4C04-32D8-801E-898265CFE7BE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

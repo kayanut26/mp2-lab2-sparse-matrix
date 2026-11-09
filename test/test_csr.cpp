@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "csr_matrix.h"
 
-// вспомогательна€ функци€: собрать матрицу r x c из векторов CSR
+
 CSR_matrix<double> make(size_t r, size_t c, const std::vector<size_t>& cols,
 	const std::vector<size_t>& rows, const std::vector<double>& vals)
 {
@@ -10,9 +10,6 @@ CSR_matrix<double> make(size_t r, size_t c, const std::vector<size_t>& cols,
 	return m;
 }
 
-// ћатрица A:    1 0 2
-//               0 0 3
-//               4 5 0
 CSR_matrix<double> make_A()
 {
 	return make(3, 3, { 0, 2, 2, 0, 1 }, { 0, 2, 3, 5 }, { 1, 2, 3, 4, 5 });
@@ -33,12 +30,10 @@ TEST(TestMatrix, can_set_from_vectors)
 {
 	CSR_matrix<double> m(5, 5);
 	std::vector<size_t> cols = { 0, 2, 4, 1, 3 };
-	std::vector<size_t> rows = { 0, 2, 2, 4, 5, 5 };   // 5 строк -> 6 элементов
+	std::vector<size_t> rows = { 0, 2, 2, 4, 5, 5 };
 	std::vector<double> vals = { 1.0, 2.0, 3.0, 4.0, 5.0 };
 	ASSERT_NO_THROW(m.set_from_vectors(cols, rows, vals));
 }
-
-// ---- умножение на вектор ----
 
 TEST(TestMultiply, gives_correct_result)
 {
@@ -54,18 +49,10 @@ TEST(TestMultiply, throws_when_vector_size_is_wrong)
 	ASSERT_THROW(make_A() * std::vector<double>(2, 1.0), std::invalid_argument);
 }
 
-// ---- сложение ----
-
 TEST(TestAddition, gives_correct_result)
 {
-	// B:  -1 7 0
-	//      0 0 0
-	//      0 0 1
 	CSR_matrix<double> B = make(3, 3, { 0, 1, 2 }, { 0, 2, 2, 3 }, { -1, 7, 1 });
 
-	// A + B:  0 7 2
-	//         0 0 3
-	//         4 5 1
 	CSR_matrix<double> expected = make(3, 3, { 0, 1, 2, 2, 0, 1, 2 }, { 0, 3, 4, 7 }, { 0, 7, 2, 3, 4, 5, 1 });
 
 	EXPECT_TRUE(expected == make_A() + B);
@@ -77,20 +64,14 @@ TEST(TestAddition, throws_when_sizes_are_different)
 	ASSERT_THROW(A + B, std::invalid_argument);
 }
 
-// ---- транспонирование ----
-
 TEST(TestTranspose, gives_correct_result)
 {
-	// A^T:  1 0 4
-	//       0 0 5
-	//       2 3 0
 	CSR_matrix<double> expected = make(3, 3, { 0, 2, 2, 0, 1 }, { 0, 2, 3, 5 }, { 1, 4, 5, 2, 3 });
 	EXPECT_TRUE(expected == make_A().transpose());
 }
 
 TEST(TestTranspose, changes_size_of_non_square_matrix)
 {
-	// матрица 2x3
 	CSR_matrix<double> M = make(2, 3, { 2, 0 }, { 0, 1, 2 }, { 5, 6 });
 	CSR_matrix<double> T = M.transpose();
 	EXPECT_EQ(3u, T.n_rows);
@@ -102,8 +83,6 @@ TEST(TestTranspose, double_transpose_gives_original_matrix)
 	CSR_matrix<double> A = make_A();
 	EXPECT_TRUE(A == A.transpose().transpose());
 }
-
-// ---- сравнение ----
 
 TEST(TestEquality, matrix_is_equal_to_its_copy)
 {

@@ -1,0 +1,1 @@
+include("C:/Users/User/source/repos/kayanut26/mp2-lab2-sparse-matrix/build/test/sparse_tests[1]_include-${CTEST_CONFIGURATION_TYPE}.cmake")

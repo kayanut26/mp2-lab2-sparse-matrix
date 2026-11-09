@@ -106,7 +106,6 @@ public:
         return *this;
     }
 
-    // вектора cols, rows, vals содержат корректное описание матрицы в формате CSR
     void set_from_vectors(const std::vector<size_t>& cols, const std::vector<size_t>& rows,
         const std::vector<ValT>& vals) {
 
@@ -202,8 +201,6 @@ public:
         std::cout << '\n';
     }
 
-
-    // сложение матриц в формате CSR
     CSR_matrix operator+(const CSR_matrix& other) const {
         if (n_rows != other.n_rows || n_cols != other.n_cols)
             throw std::invalid_argument("matrix sizes must be equal");
@@ -217,19 +214,16 @@ public:
 
             while (a < a_end || b < b_end) {
                 if (b == b_end || (a < a_end && Col[a] < other.Col[b])) {
-                    // столбец есть только в первой матрице
                     cols.push_back(Col[a]);
                     vals.push_back(Val[a]);
                     ++a;
                 }
                 else if (a == a_end || other.Col[b] < Col[a]) {
-                    // столбец есть только во второй матрице
                     cols.push_back(other.Col[b]);
                     vals.push_back(other.Val[b]);
                     ++b;
                 }
                 else {
-                    // столбец есть в обеих - складываем значения
                     cols.push_back(Col[a]);
                     vals.push_back(Val[a] + other.Val[b]);
                     ++a;
@@ -247,7 +241,6 @@ public:
     }
 
 
-    // умножение матрицы на вектор
     std::vector<ValT> operator*(const std::vector<ValT>& x) const {
         if (x.size() != n_cols)
             throw std::invalid_argument("vector size must be equal to the number of columns");
@@ -259,20 +252,15 @@ public:
         return result;
     }
 
-
-    // транспонирование матрицы в формате CSR
     CSR_matrix transpose() const {
         CSR_matrix res(n_cols, n_rows, nz);
 
-        // 1. считаем, сколько элементов в каждом столбце исходной матрицы
         for (size_t j = 0; j < nz; ++j)
             ++res.RowIndex[Col[j] + 1];
 
-        // 2. префиксные суммы: получаем начала строк результата
         for (size_t i = 0; i < n_cols; ++i)
             res.RowIndex[i + 1] += res.RowIndex[i];
 
-        // 3. раскладываем элементы (next[c] - куда класть следующий элемент строки c)
         std::vector<size_t> next(res.RowIndex, res.RowIndex + n_cols);
         for (size_t i = 0; i < n_rows; ++i) {
             for (size_t j = RowIndex[i]; j < RowIndex[i + 1]; ++j) {
@@ -284,8 +272,6 @@ public:
         return res;
     }
 
-
-    // сравнение матриц (значения сравниваем с небольшой погрешностью)
     bool operator==(const CSR_matrix& other) const {
         if (n_rows != other.n_rows || n_cols != other.n_cols || nz != other.nz)
             return false;
